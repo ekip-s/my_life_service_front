@@ -93,12 +93,6 @@ hr {
     box-shadow: var(--top_line_shadow);
 }
 
-.main_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .button_form {
     margin-right: 1rem;
 }
@@ -109,10 +103,6 @@ h4 {
 
 .sub_text {
     color: var(--side_text_color);
-}
-
-.main_text_header {
-    width: 70%;
 }
 
 .menu {
@@ -142,4 +132,27 @@ section {
 
 .fieldset_course {
     padding: 1rem;
+}
+
+.course_node input {
+    margin-left: 0.5rem;
+    flex: 1 1 0%;
+    min-width: 0;
+    color: #141414d1;
+    font-size: 1.3rem;
+    font-weight: 500;
+    padding: 0.2rem;
+    border: 1px solid #ffffff00;
+    border-radius: 11px
+}
+
+.course_node {
+    display: flex;
+    align-items: center;
+}
+
+.cource_list {
+    border: 1px solid #64626290;
+    padding: 0.7rem;
+    border-radius: 11px
 }
