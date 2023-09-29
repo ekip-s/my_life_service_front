@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <h3 class="menu_label">MyLifeService Course</h3>
+            <div class="menuapp">
+                <button class="menubtn">
+                    <div class="main_menu">
+                        <div>
+                            <div class="menu_icon"></div>
+                            <div class="menu_icon"></div>
+                            <div class="menu_icon"></div>
+                        </div>
+                        <div class="menu_text">Меню</div>
+                    </div>
+                </button>                
+                <div class="menu-content">
+                    <a href="#">Курсы</a>
+                    <a href="#">-</a>
+                    <a href="#">-</a>
+                </div>
+            </div>
+        </div>
+        <hr>        
+    </header>
+    <main>
+        <section>
+            <div class="main_header">
+                <h3>Мои курсы:</h3>
+                <h4 class="sub_text">Курсы, которые я хочу пройти. Курсы распределены по дням, нужно проходить курсы, которые распределены на этот день.</h4>
+            </div>
+        </section>
+
+        <section class="main_body">
+            <div class="cource_list">
+
+                <div class="course_node">
+                    <p class="course_id" hidden>not_id</p>
+                    <div class="course_top_meru">
+                        <div class="course_meru_left">
+                            <h3>Название курса:</h3>
+                            <input type="text" placeholder="Введи название курса">
+                        </div>
+                        <dev class="course_meru_rigth">
+                            <div clacc="course_top_meru_dt">
+                                Дата начала курса: 01.01.2023 
+                                <br>
+                                Дата завершения курса: 03.03.2023
+                            </div>
+                        </dev>
+                    </div>
+                    <hr>
+                    <div class="lesson_list">
+                        <div class="lesson_node">
+                            <p class="lesson_id" hidden>not_id</p>
+                            <div class="lesson_menu">
+                                <div class="lesson_checkbox">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="lesson_bottom">
+                                    <div class="lesson_meru_top">
+                                        <b>Урок № ...</b>
+                                        <div class="lesson_meru_rigth">
+                                            <p>Дата:</p>
+                                            <p>01.01.2023</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="lesson_meru_left">
+                                        <h3>Название урока:</h3>
+                                        <input type="text" placeholder="Введи название урока">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>    
+
+                        <div class="add_new_lesson">
+                            <button class="btn"> + ... новый урок</button>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div class="add_new_lesson">
+                    <button class="btn"> + ... новый курс</button>
+                </div>
+                
+            </div>
+            
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>
