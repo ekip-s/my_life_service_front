@@ -244,3 +244,8 @@ section {
 .lesson_bottom {
     justify-content: space-between;
 }
+
+input:focus {
+    outline: none !important;
+    box-shadow: var(--box_shadow);
+}

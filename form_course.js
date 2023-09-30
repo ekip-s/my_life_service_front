@@ -1,17 +1,52 @@
-const addNewLineBtn = document.querySelector('#add_new_line');
-const fieldsetList = document.querySelector('#fieldset_course_list');
-let formNum = 1;
+const coursList = document.querySelector('.cource_list');
 
-addNewLineBtn.addEventListener('click', async e => {
-   formNum = formNum + 1;
-   const content = document.createElement('div');
-   content.id = `${formNum}`
+window.addEventListener('load', async () => {
 
-   content.innerHTML = 
-   `
-   <h4>Урок №${formNum}</h4>
-   <label for="lesson_name_${formNum}">Название урока:</label>
-   <input id="lesson_name${formNum}"><br>
-   `
-   fieldsetList.appendChild(content);
+   checkCourse();
+   
+/*
+   coursList.forEach(course => {
+      course.addEventListener('change', e => {
+         console.log(e.target.value);
+         console.log(
+            (((e.target).parentNode).parentNode).parentNode
+            .document.querySelector('.course_id'));
+      });
+   });
+*/
 });
+
+async function checkCourse() {
+   const url = `http://localhost:8081/api/v1/course/1`;
+   const response = await fetch(url);
+   const answer = await response.json();
+   if(answer.length == 0) {
+      addForm();
+   } else {
+      console.log('не пустой json')
+   }
+}
+
+async function addForm() {
+   let fakeDiv = document.createElement('div');
+   fakeDiv.className = 'course_node';
+   fakeDiv.innerHTML = 
+   `
+   <p class="course_id" hidden>not_id</p>
+   <div class="course_top_meru">
+      <div class="course_meru_left">
+         <h3>Название курса:</h3>
+         <input type="text" placeholder="Введи название курса">
+      </div>
+   </div>
+   <hr>
+   <div class="lesson_list">
+   </div>
+   `; 
+   coursList.append(fakeDiv)
+
+   fakeDiv.addEventListener('change', e => {
+      console.log(e.target.value)
+   });
+}
+
