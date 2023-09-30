@@ -1,0 +1,251 @@
+:root {
+    --main_text_color: rgba(11, 12, 14, 0.701);
+    --side_text_color: rgba(119, 117, 117, 0.774);
+    --text_shadow: rgba(119, 117, 117, 0.774) 2px 3px 3px;
+    --top_line_shadow:0.5px 0.5px 0.5px 0.5px rgba(119, 117, 117, 0.774);
+    --box_shadow:1px 2px 3px 1px rgba(119, 117, 117, 0.774);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family:'Roboto', sans-serif;
+}
+
+body {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+header {
+    margin-top: 1rem; 
+    margin-bottom: 0.6rem;  
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+}
+
+.menu_label {
+    text-shadow: var(--text_shadow);
+}
+
+.menubtn {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-weight: 700;
+}
+
+.menu_text {
+    margin-left: 0.2rem;
+    font-size: medium;
+}
+
+.main_menu {
+    display: flex;
+    align-items: center;
+}
+
+.menu_icon {
+    width: 15px;
+    height: 2px;
+    background-color: black;
+    margin: 2px 0;
+}
+
+.menuapp {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.menu-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+
+.menu-content a:hover {
+    background-color: #ddd;
+}
+
+.menuapp:hover .menu-content {
+    display: block;
+}
+
+.menuapp:hover .menubtn {
+    background-color: #d9d7d720;
+}
+
+hr {
+    box-shadow: var(--top_line_shadow);
+}
+
+.button_form {
+    margin-right: 1rem;
+}
+
+h4 {
+    margin-top: 0.6rem;
+}
+
+.sub_text {
+    color: var(--side_text_color);
+}
+
+.menu {
+    margin-bottom: 0.5rem;
+}
+
+.button_form_submit {
+    border-color: var(--main_text_color);
+    outline: none;
+    background: none;
+    border-radius: 15px;
+    padding: 0.2rem;
+    height: 2.5rem;
+}
+
+.button_form_submit:hover {
+    box-shadow: var(--box_shadow);
+}
+
+.button_form_submit:active {
+    opacity: 60%;
+}
+
+section {
+    margin-top: 2rem;
+}
+
+.fieldset_course {
+    padding: 1rem;
+}
+
+.course_meru_left input,
+.lesson_meru_left input {
+    margin-left: 0.5rem;
+    flex: 1 1 0%;
+    min-width: 0;
+    color: #141414d1;
+    font-size: 1.3rem;
+    font-weight: 500;
+    padding: 0.2rem;
+    border: 1px solid #ffffff00;
+    border-radius: 11px;
+}
+
+.course_top_meru {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.course_meru_left, 
+.lesson_meru_left {
+    display: flex;
+    align-items: center;
+}
+
+.course_node {
+    border: 1px solid #64626290;
+    padding: 0.7rem;
+    border-radius: 11px;  
+    box-shadow: var(--box_shadow);
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    border-color: var(--main_text_color);
+    outline: none;
+    background: none;
+    border-radius: 15px;
+    padding: 0.2rem;
+    height: 2.5rem;
+}
+
+.btn:hover {
+    box-shadow: var(--box_shadow);
+}
+
+.course_meru_rigth {
+    border: 1px solid #64626290;
+    border-radius: 11px;  
+    font-size: 0.6rem;
+    padding: 0.3rem;
+    box-shadow: var(--box_shadow);
+}
+
+.lesson_node {
+    border: 1px solid #64626254;
+    border-radius: 11px;  
+    padding: 0.3rem;
+    box-shadow: var(--box_shadow);
+    margin-bottom: 0.5rem;
+}
+
+.course_node hr {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.lesson_menu {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    flex-grow: 3;
+}
+
+.lesson_bottom {
+    flex-grow: 2;
+}
+
+.lesson_checkbox {
+    margin: 1rem;
+}
+
+.lesson_meru_left {
+    display: flex;
+}
+
+.lesson_meru_left h3 {
+    font-size: 1rem;
+}
+
+.lesson_meru_rigth {
+    display: flex;
+    align-items: center;
+    border: 1px solid #64626290;
+    border-radius: 11px;  
+    font-size: 0.6rem;
+    padding: 0.3rem;
+    box-shadow: var(--box_shadow);
+}
+
+.lesson_meru_top {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 2rem;
+    margin-bottom: 0.3rem;
+}
+
+.lesson_bottom {
+    justify-content: space-between;
+}
+
+input:focus {
+    outline: none !important;
+    box-shadow: var(--box_shadow);
+}
