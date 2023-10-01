@@ -1,21 +1,55 @@
 const coursList = document.querySelector('.cource_list');
 const courseURL = 'http://localhost:8081/api/v1';
+const myUUID = 'a1d5ca3c-fdb5-49be-b73c-32dca343c6c7';
 
 window.addEventListener('load', async () => {
-   const url = courseURL + `/course/1`;
-   const response = await fetch(url);
-   const answer = await response.json();
+   const answer = await getAllCourse();
    if(answer.length != 0) {
       createFormList(answer);
-   }
+   } 
 
    createLessonForm(answer);
-   
    createCourseForm(answer);
+   
 });
 
 function createFormList(answerJSON) {
-   console.log('createFormList')
+   answerJSON.forEach(course => {
+      let newDiv = document.createElement('div');
+      newDiv.className = 'course_node';
+      newDiv.innerHTML =
+      `
+      <div class="course_top_meru">
+         <div class="course_meru_left">
+            <h3>Название курса:</h3>
+            <input id="${course.id}" type="text" placeholder="Введи название курса" value="${course.courseName}">
+         </div>
+      </div>
+      <hr>
+      <div class="lesson_list">
+         
+      </div>
+      `;
+      coursList.append(newDiv);
+
+      if(course.endDate !== null) {
+         console.log('есть дата завершения курса')
+      }
+
+      if(course.lessonList !== null) {
+         console.log('есть лист с уроками')
+      }
+   })
+   
+
+
+
+
+
+
+
+
+
 }
 
 function createLessonForm(answerJSON) {
@@ -64,27 +98,16 @@ function addFakeDiv() {
 }
 
 async function addNewCourse(name) {
-   let requestBody = {
-      courseName: `${name}`
-   };
-   await fetch(courseURL + `/course/1`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-          },
-          mode: 'cors',
-          body: JSON.stringify(requestBody)
-          });
+   let newCourse = await postCourse(name);
 
    let newDiv = document.createElement('div');
    newDiv.className = 'course_node';
    newDiv.innerHTML = 
    `
-   <p class="course_id" hidden>not_id</p>
    <div class="course_top_meru">
       <div class="course_meru_left">
       <h3>Название курса:</h3>
-      <input id="course_form" type="text" placeholder="Введи название курса" value="${name}">
+      <input id="${newCourse.id}" type="text" placeholder="Введи название курса" value="${name}">
       </div>
    </div>
    <hr>
@@ -92,7 +115,7 @@ async function addNewCourse(name) {
       <div id="lesson_form" class="lesson_node">
          <div class="lesson_menu">
             <div class="lesson_checkbox">
-               <input type="checkbox">
+               <input id="lesson_checkbox" type="checkbox">
             </div>
             <div class="lesson_bottom">
                <div class="lesson_meru_top">
@@ -100,7 +123,7 @@ async function addNewCourse(name) {
                </div>
                <div class="lesson_meru_left">
                   <h3>Название урока:</h3>
-                  <input type="text" placeholder="Введи название урока">
+                  <input id="lesson_text_input" type="text" placeholder="Введи название урока">
                </div>
             </div>
       </div>
@@ -111,18 +134,59 @@ async function addNewCourse(name) {
    let fakeDiv = document.querySelector('#course_form');
    fakeDiv.before(newDiv);
 
-   let fakeInput = document.querySelector('.course_node input[type="text"]');
+   let fakeInput = document.getElementById(newCourse.id);
    console.log(fakeInput);
 
    
 
    fakeInput.addEventListener('change', async e => {
-      console.log('patch maring');
+      console.log('patch maping');
    });
 
-   let fakeLessonDiv = document.querySelector('#lesson_form');
+   let fakeLessonDiv = document.querySelector('#lesson_form input[type=text]');
 
    fakeLessonDiv.addEventListener('change', async e => {
       console.log('обрабочик под форму');
    });
+}
+
+async function postCourse(name) {
+   const requestBody = {
+      courseName: `${name}`
+   };
+
+   const response = await fetch(courseURL + `/course/` + myUUID, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+          },
+          mode: 'cors',
+          body: JSON.stringify(requestBody)
+          });
+   let newCourse = await response.json();     
+   return newCourse;
+}
+
+async function patchCourse(id, name) {
+   const requestBody = {
+      courseName: `${name}`
+   };
+
+   const response = await fetch(courseURL + `/course/` + myUUID + `/` + id, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+          },
+          mode: 'cors',
+          body: JSON.stringify(requestBody)
+          });
+   let newCourse = await response.json();     
+   return newCourse;
+}
+
+async function getAllCourse() {
+   const url = courseURL + `/course/` + myUUID;
+   const response = await fetch(url);
+   const answer = await response.json();
+   return answer;
 }
