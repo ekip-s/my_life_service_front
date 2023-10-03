@@ -15,25 +15,23 @@ window.addEventListener('load', async () => {
 
 function createFormList(answerJSON) {
    answerJSON.forEach(course => {
-      let newDiv = document.createElement('div');
-      newDiv.className = 'course_node';
-      newDiv.innerHTML =
-      `
-      <div class="course_top_meru">
-         <div class="course_meru_left">
-            <h3>Название курса:</h3>
-            <input id="${course.id}" type="text" placeholder="Введи название курса" value="${course.courseName}">
-         </div>
-      </div>
-      <hr>
-      <div class="lesson_list">
-         
-      </div>
-      `;
+      let newDiv = createCourseNode(course.id, course.courseName);
+      
       coursList.append(newDiv);
 
       if(course.endDate !== null) {
          console.log('есть дата завершения курса')
+      }
+
+      if(course['id'] === answerJSON[(answerJSON.length - 1)]['id']) {
+         console.log(document.getElementById(course['id']).closest('.course_node').querySelector('.lesson_list'));
+
+         let fakeDivLesson = createFakeLesson();
+
+         document.getElementById(course['id']).closest('.course_node').querySelector('.lesson_list').append(fakeDivLesson);
+
+         console.log('нужно добавить обработчик для fakeDivLesson');
+
       }
 
       if(course.lessonList !== null) {
@@ -135,8 +133,6 @@ async function addNewCourse(name) {
    fakeDiv.before(newDiv);
 
    let fakeInput = document.getElementById(newCourse.id);
-   console.log(fakeInput);
-
    
 
    fakeInput.addEventListener('change', async e => {
@@ -155,7 +151,7 @@ async function postCourse(name) {
       courseName: `${name}`
    };
 
-   const response = await fetch(courseURL + `/course/` + myUUID, {
+   const response = await fetch(courseURL + '/' + myUUID + `/course`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json;charset=utf-8'
@@ -172,7 +168,7 @@ async function patchCourse(id, name) {
       courseName: `${name}`
    };
 
-   const response = await fetch(courseURL + `/course/` + myUUID + `/` + id, {
+   const response = await fetch(courseURL + '/' + myUUID + `/course/` + id, {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json;charset=utf-8'
@@ -185,8 +181,60 @@ async function patchCourse(id, name) {
 }
 
 async function getAllCourse() {
-   const url = courseURL + `/course/` + myUUID;
+   const url = courseURL + '/' + myUUID + `/course`;
    const response = await fetch(url);
    const answer = await response.json();
    return answer;
+}
+
+function createFakeLesson() {
+   let fakeDivLesson = document.createElement('div');
+   fakeDivLesson.id = 'lesson_form'
+   fakeDivLesson.className = 'lesson_node';
+   fakeDivLesson.innerHTML =
+         `
+         <div class="lesson_menu">
+            <div class="lesson_checkbox">
+               <input id="lesson_checkbox" type="checkbox">
+            </div>
+            <div class="lesson_bottom">
+               <div class="lesson_meru_top">
+                  <b>Урок № ...</b>
+               </div>
+               <div class="lesson_meru_left">
+                  <h3>Название урока:</h3>
+                  <input id="lesson_text_input" type="text" placeholder="Введи название урока">
+               </div>
+            </div>
+         `;
+
+   return fakeDivLesson;
+}
+
+function createCourseNode(id, courseName) {
+   let newDiv = document.createElement('div');
+   newDiv.className = 'course_node';
+   newDiv.innerHTML =
+      `
+      <div class="course_top_meru">
+         <div class="course_meru_left">
+            <h3>Название курса:</h3>
+            <input id="${id}" type="text" placeholder="Введи название курса" value="${courseName}">
+         </div>
+      </div>
+      <hr>
+      <div class="lesson_list">
+         
+      </div>
+      `;
+
+   return newDiv;
+}
+
+function addNewLesson() {
+   
+}
+
+function addNewLessonPatchEventListener() {
+
 }
