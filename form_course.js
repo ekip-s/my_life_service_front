@@ -7,7 +7,18 @@ window.addEventListener('load', async () => {
    if(answer.length != 0) {
       createFormList(answer);
    } 
+
+   createFakeCourseForm(answer)
 });
+
+function createFakeCourseForm(answer) {
+   if(answer.length == 0) {
+      const courseForm = createCourseNode('course_fake_form', '');
+      coursList.append(courseForm);
+      coursePostEventListener('course_fake_form');
+   }
+
+}
 
 function createCourseForm(answerJSON) {
    let fakeDiv = createFakeDiv();
@@ -41,6 +52,21 @@ function coursePatchEventListener(id) {
          fakeInput.value = name;
       }      
    });
+}
+
+function coursePostEventListener(id) {
+   let fakeInput = document.getElementById(id);
+   fakeInput.addEventListener('change', async e => {
+      let name = e.target.value;
+      if (name.trim()) {
+         const course = await postCourse(name);
+         let newDiv = createNewCourse(course.id, course.courseName);
+         const fakeInputForm = fakeInput.closest('.course_node');
+         fakeInputForm.before(newDiv);
+         coursePatchEventListener(course.id);
+         fakeInputForm.remove();         
+      }
+   })
 }
 
 function createNewCourse(id, name) {
@@ -89,14 +115,25 @@ async function addCourseLessonsList(courseId) {
       lessonsList.forEach(async lesson => {
          const newLesson = createNewLessonForm(lesson.id, lesson.lessonNum, lesson.planedStartDate, lesson.lessonName);
          lessonListform.append(newLesson);
-         addNewLessonPatchEventListener(courseId, lesson.id);
-         // добавление done обработчика
+         addNewLessonPatchEventListener(lesson.id);
+         addDoneEventListener(lesson.id);
          console.log('добавление done обработчика')
       })
    }
 }
 
-function addNewLessonPatchEventListener(courseId, lessonId) {
+function addDoneEventListener(lessonId) {
+   const lessonCheckbox = document.getElementById(lessonId);
+
+   lessonCheckbox.addEventListener('change', async e => {
+      const lessonNode = lessonCheckbox.closest('.lesson_node');
+      await doneCourse(lessonId);
+      lessonNode.remove();
+   }) 
+
+}
+
+function addNewLessonPatchEventListener(lessonId) {
    const lessonInput = document.getElementById(lessonId + '-text-input');
 
    lessonInput.addEventListener('change', async e => {
@@ -237,26 +274,36 @@ async function addNewLesson(name, courseId) {
 
 async function postCourse(name) {
 
-   const response = await fetch(courseURL + '/course' + myUUID + `/name/` + name, {
+   const response = await fetch(courseURL + '/course/' + myUUID + `/name/` + name, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json;charset=utf-8'
           },
-          mode: 'cors',
-          body: JSON.stringify(requestBody)
+          mode: 'cors'
           });
    return await response.json();     
 }
 
 async function patchCourse(id, name) {
 
-   const response = await fetch(courseURL + '/course' + id + '/name/' + name, {
+   const response = await fetch(courseURL + '/course/' + id + '/name/' + name, {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json;charset=utf-8'
           },
-          mode: 'cors',
-          body: JSON.stringify(requestBody)
+          mode: 'cors'
+          });
+   return await response.json(); 
+}
+
+async function doneCourse(lessonId) {
+
+   const response = await fetch(courseURL + '/lesson/done/' + lessonId, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+          },
+          mode: 'cors'
           });
    return await response.json(); 
 }
