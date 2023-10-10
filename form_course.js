@@ -8,11 +8,30 @@ window.addEventListener('load', async () => {
       createFormList(answer);
    } 
 
-   createFakeCourseForm(answer)
+   createFakeCourseForm(answer);
+
+   createFakeLessonForm(answer);
 });
 
-function createFakeCourseForm(answer) {
-   if(answer.length == 0) {
+async function createFakeLessonForm(answer) {
+   if(answer.length != 0) {
+      const lessonList = document.getElementById((answer[answer.length - 1].id)).closest('.course_node').querySelector('.lesson_list')
+
+      const nowDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
+
+      const newLesson = createNewLessonForm('lesson_fake_form', '...', nowDate, '');
+
+      lessonList.append(newLesson);
+      /*   addNewLessonPatchEventListener(lesson.id);
+         addDoneEventListener(lesson.id);
+         console.log('добавление done обработчика')*/
+   } 
+}
+
+async function createFakeCourseForm(answer) {
+
+   if(answer.length == 0 || (answer.length != 0 && 
+      (await getAllLessons(answer[answer.length - 1].id)).length > 0)) {
       const courseForm = createCourseNode('course_fake_form', '');
       coursList.append(courseForm);
       coursePostEventListener('course_fake_form');
@@ -86,8 +105,6 @@ function createNewCourse(id, name) {
    </div>`;
    return newDiv;
 }
-
-
 
 function createFormList(answerJSON) {
 
@@ -336,5 +353,5 @@ async function addNewCourse(name) {
 
 function createNormDate(date) {
    let newdate = new Date(date);
-   return newdate.getDate() + '.' + newdate.getMonth() + '.' + newdate.getFullYear();
+   return newdate.getDate() + '.' + (newdate.getMonth() + 1) + '.' + newdate.getFullYear();
 }
