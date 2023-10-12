@@ -18,17 +18,37 @@ window.addEventListener('load', async () => {
 async function createFakeLessonForm(answer) {
    if(answer.length != 0) {
       const courceId = answer[answer.length - 1].id;
-      const nowDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
-      const newLesson = createNewLessonForm('lesson_fake_form', '...', nowDate, '');
+      const newLesson = createNewLessonForm('lesson_fake_form', '...', '', '');
 
       const lessonListForm = document.getElementById(courceId).querySelector('.lesson_list');
       lessonListForm.append(newLesson);
+      addNewLessonPostEventListener(courceId);
 
       //мы здесь остановились
-      /*   addNewLessonPatchEventListener(lesson.id);
+      /* 
          addDoneEventListener(lesson.id);
          console.log('добавление done обработчика')*/
    } 
+}
+
+function addNewLessonPostEventListener(courceId) {
+   const fakeFormInput = document.getElementById('lesson_fake_form-text-input');
+   const fakeForm = document.getElementById('lesson_fake_form');
+
+   fakeFormInput.addEventListener('change', async e => {
+      let name = e.target.value;
+
+      if (name.trim()) {
+         const lesson = await postLesson(courceId, name);
+         const lessonForm = createNewLessonForm(lesson.id, lesson.lessonNum, lesson.planedStartDate, name);
+         fakeForm.before(lessonForm);
+         let elem = document.getElementById(lesson.id + '-text-input')
+         fakeFormInput.value = '';
+         addNewLessonPatchEventListener(lesson.id);
+      }
+   })
+
+
 }
 
 //создает пустую форму для нового курса
@@ -66,7 +86,8 @@ function coursePostEventListener(id) {
          const fakeInputForm = document.getElementById(id);
          fakeInputForm.before(newDiv);
          coursePatchEventListener(course.id);
-         fakeInputForm.remove();         
+         fakeInputForm.remove();      
+         createFakeLessonForm(await getAllCourse());   
       }
    })
 }
@@ -224,6 +245,18 @@ async function postCourse(name) {
    return await response.json();     
 }
 
+//обращение к бэку для создания урока, внутри курса
+async function postLesson(courseId, lessonName) {
+   const response = await fetch(courseURL + '/lesson/person/' + myUUID + '/course/' + courseId + '/name/' + lessonName, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+          },
+          mode: 'cors'
+          });
+   return await response.json();
+}
+
 // обращение к бэку для обновления названия курса;
 async function patchCourse(id, name) {
 
@@ -268,7 +301,12 @@ async function getAllLessons(courseId) {
 
 //создает читаемую дату
 function createNormDate(date) {
-   let newdate = new Date(date);
+   let newdate;
+   if(date.trim()) {
+      newdate = new Date(date);
+   } else {
+      newdate = new Date();
+   }
    return newdate.getDate() + '.' + (newdate.getMonth() + 1) + '.' + newdate.getFullYear();
 }
 
