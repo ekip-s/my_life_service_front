@@ -40,7 +40,7 @@ function addNewLessonPostEventListener(courceId) {
          fakeForm.before(lessonForm);
          fakeFormInput.value = '';
          addNewLessonPatchEventListener(lesson.id);
-         addDoneEventListener(lesson.id);
+         addDoneEventListener(lesson.id, courceId);
          if (lesson.lessonNum === 1) {
             createFakeCourseForm(await getAllCourse()); 
          }
@@ -126,21 +126,30 @@ async function addCourseLessonsList(courseId) {
          const newLesson = createNewLessonForm(lesson.id, lesson.lessonNum, lesson.planedStartDate, lesson.lessonName);
          lessonListform.append(newLesson);
          addNewLessonPatchEventListener(lesson.id);
-         addDoneEventListener(lesson.id);
+         addDoneEventListener(lesson.id, courseId);
       })
    }
 }
 
 //Обращение к бэку для завершения урока
-function addDoneEventListener(lessonId) {
+function addDoneEventListener(lessonId, courseId) { //добавить в переменные
    const lessonCheckbox = document.getElementById(lessonId + '-checkbox');
 
    lessonCheckbox.addEventListener('change', async e => {
       const lessonNode = lessonCheckbox.closest('.lesson_node');
       await doneLesson(lessonId);
       lessonNode.remove();
+      await checkCourseDone(courseId);
    }) 
+}
 
+async function checkCourseDone(courseId) {
+   const lessonCount = (await getAllLessons(courseId)).length;
+   if(lessonCount === 0) {
+      const course = document.getElementById(courseId); 
+      await doneCourse(courseId);
+      course.remove(); 
+   }
 }
 
 //patch обработчик для урока
@@ -278,6 +287,18 @@ async function patchCourse(id, name) {
 async function doneLesson(lessonId) {
 
    const response = await fetch(courseURL + '/lesson/done/' + lessonId, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+          },
+          mode: 'cors'
+          });
+   return await response.json(); 
+}
+
+// обращение к бэку для выполнения курса 
+async function doneCourse(courseId) {
+   const response = await fetch(courseURL + '/course/' + courseId + '/done', {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json;charset=utf-8'
