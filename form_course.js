@@ -23,14 +23,10 @@ async function createFakeLessonForm(answer) {
       const lessonListForm = document.getElementById(courceId).querySelector('.lesson_list');
       lessonListForm.append(newLesson);
       addNewLessonPostEventListener(courceId);
-
-      //мы здесь остановились
-      /* 
-         addDoneEventListener(lesson.id);
-         console.log('добавление done обработчика')*/
    } 
 }
 
+//обработчик для формы создания новых уроков
 function addNewLessonPostEventListener(courceId) {
    const fakeFormInput = document.getElementById('lesson_fake_form-text-input');
    const fakeForm = document.getElementById('lesson_fake_form');
@@ -42,9 +38,12 @@ function addNewLessonPostEventListener(courceId) {
          const lesson = await postLesson(courceId, name);
          const lessonForm = createNewLessonForm(lesson.id, lesson.lessonNum, lesson.planedStartDate, name);
          fakeForm.before(lessonForm);
-         let elem = document.getElementById(lesson.id + '-text-input')
          fakeFormInput.value = '';
          addNewLessonPatchEventListener(lesson.id);
+         addDoneEventListener(lesson.id);
+         if (lesson.lessonNum === 1) {
+            createFakeCourseForm(await getAllCourse()); 
+         }
       }
    })
 
@@ -84,6 +83,12 @@ function coursePostEventListener(id) {
          const course = await postCourse(name);
          let newDiv = createCourseNode(course.id, course.courseName);
          const fakeInputForm = document.getElementById(id);
+
+         const lastFakeLessonForm = document.getElementById('lesson_fake_form');
+         if(lastFakeLessonForm !== null) {
+            lastFakeLessonForm.remove();
+         }
+
          fakeInputForm.before(newDiv);
          coursePatchEventListener(course.id);
          fakeInputForm.remove();      
@@ -122,7 +127,6 @@ async function addCourseLessonsList(courseId) {
          lessonListform.append(newLesson);
          addNewLessonPatchEventListener(lesson.id);
          addDoneEventListener(lesson.id);
-         console.log('добавление done обработчика')
       })
    }
 }
@@ -309,113 +313,3 @@ function createNormDate(date) {
    }
    return newdate.getDate() + '.' + (newdate.getMonth() + 1) + '.' + newdate.getFullYear();
 }
-
-//deprecated
-/*
-async function addNewCourse(name) {
-   let newCourse = await postCourse(name);
-   let newDiv = createNewCourse(newCourse.id, newCourse.courseName);
-
-   let fakeDiv = document.querySelector('#course_form');
-   fakeDiv.before(newDiv);
-
-   coursePatchEventListener(newCourse.id)
-
-   console.log(newDiv.querySelector('#lesson_form'));
-}
-
-function createFakeLesson() {
-   let fakeDivLesson = document.createElement('div');
-   fakeDivLesson.id = 'lesson_form'
-   fakeDivLesson.className = 'lesson_node';
-   fakeDivLesson.innerHTML =
-         `
-         <div class="lesson_menu">
-            <div class="lesson_checkbox">
-               <input id="lesson_checkbox" type="checkbox">
-            </div>
-            <div class="lesson_bottom">
-               <div class="lesson_meru_top">
-                  <b>Урок № ...</b>
-               </div>
-               <div class="lesson_meru_left">
-                  <h3>Название урока:</h3>
-                  <input id="lesson_text_input" type="text" placeholder="Введи название урока">
-               </div>
-            </div>
-         `;
-
-   return fakeDivLesson;
-}
-
-function addNewLessonForm(lesson) {
-   let lessonForm = document.querySelector('.lesson_form');
-
-}
-
-function createNewCourse(id, name) {
-   let newDiv = document.createElement('div');
-   newDiv.className = 'course_node';
-   newDiv.innerHTML = 
-   `
-   <div class="course_top_meru">
-      <div class="course_meru_left">
-      <h3>Название курса:</h3>
-      <input id="${id}" type="text" placeholder="Введи название курса" value="${name}">
-      </div>
-   </div>
-   <hr>
-   <div class="lesson_list">
-      
-   </div>`;
-   return newDiv;
-}
-
-function createFakeDiv() {
-   let fakeDiv = document.createElement('div');
-   fakeDiv.id = 'course_form'
-   fakeDiv.className = 'course_node';
-   fakeDiv.innerHTML = 
-   `
-   <div class="course_top_meru">
-      <div class="course_meru_left">
-         <h3>Название курса:</h3>
-         <input id="course_form_id" type="text" placeholder="Введи название курса">
-      </div>
-   </div>
-   <hr>
-   <div class="lesson_list">
-   </div>
-   `; 
-   return fakeDiv;
-}
-
-function createLessonForm(answerJSON) {
-   if(answerJSON.length != 0) {
-      console.log('createLessonForm')
-   }
-}
-
-function addFakeDiv() {
-   let fakeDiv = createFakeDiv();
-   coursList.append(fakeDiv);
-   addFakeDivEventListener(fakeDiv)
-}
-
-function addFakeDivEventListener(fakeDiv) {
-   fakeDiv.addEventListener('change', async e => {
-      let name = e.target.value;
-      if (name.trim()) {
-         await addNewCourse(name);
-         let courseForm = document.querySelector('#course_form');
-         courseForm.remove();      
-      } 
-   });
-}
-
-function createCourseForm(answerJSON) {
-   let fakeDiv = createFakeDiv();
-   coursList.append(fakeDiv);
-
-}
-*/
