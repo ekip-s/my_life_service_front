@@ -106,7 +106,9 @@ function createFormList(answerJSON) {
       coursList.append(newDiv);
 
       if(course.endDate !== null) {
-         console.log('есть дата завершения курса')
+         const courseMenu = document.getElementById(course.id).querySelector('.course_meru_left');
+         let newDateDiv = createDateDiv(course.startDate, course.endDate);
+         courseMenu.after(newDateDiv);
       }
 
       coursePatchEventListener(course.id);
@@ -114,6 +116,21 @@ function createFormList(answerJSON) {
       await addCourseLessonsList(course.id);
    })
    
+}
+
+//создает div с датами курса;
+function createDateDiv(startDate, endDate) {
+   let newDateDiv = document.createElement('div');
+   newDateDiv.className = 'course_meru_rigth';
+   newDateDiv.innerHTML = 
+   `
+   <div clacc="course_top_meru_dt">
+      Дата начала курса: ${createNormDate(startDate)}
+      <br>
+      Дата завершения курса: ${createNormDate(endDate)}
+   </div>   
+   `;
+   return newDateDiv;
 }
 
 //создает уроки внутри курса; 
